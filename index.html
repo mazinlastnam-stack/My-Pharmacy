@@ -280,7 +280,7 @@
                 return;
             }
             // حساب جديد بدور user ورصيد ابتدائي 500
-            const newUser = { username, password, role: 'user', wallet: 500 };
+            const newUser = { username, password, role: 'user', wallet: 0 };
             users.push(newUser);
             localStorage.setItem('users', JSON.stringify(users));
             currentUser = { ...newUser };
