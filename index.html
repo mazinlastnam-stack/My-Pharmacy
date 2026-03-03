@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صيدليتي أونلاين</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* الأنماط كما هي (لم تتغير) */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f9f4; color: #333; line-height: 1.6; }
+        header { background-color: #2c7a4d; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .logo h1 { font-size: 1.8rem; }
+        nav ul { list-style: none; display: flex; gap: 1.5rem; }
+        nav a { color: white; text-decoration: none; font-weight: bold; cursor: pointer; }
+        nav a:hover { opacity: 0.8; text-decoration: underline; }
+        .user-info { display: flex; align-items: center; gap: 1rem; }
+        .wallet-balance { background-color: #ffaa33; color: #333; padding: 0.3rem 0.8rem; border-radius: 20px; font-weight: bold; font-size: 0.9rem; cursor: pointer; }
+        .wallet-balance:hover { background-color: #ff9500; }
+        .cart-icon { position: relative; cursor: pointer; font-size: 1.5rem; }
+        .cart-count { position: absolute; top: -10px; right: -10px; background-color: #ffaa33; color: #333; border-radius: 50%; padding: 0.2rem 0.5rem; font-size: 0.8rem; font-weight: bold; }
+        .hero { background: linear-gradient(rgba(44, 122, 77, 0.85), rgba(44, 122, 77, 0.85)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%232c7a4d"/><text x="50" y="55" font-size="14" text-anchor="middle" fill="white" font-family="Arial">صيدلية</text></svg>');
+            background-size: cover; color: white; text-align: center; padding: 4rem 2rem; }
+        .hero h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.2rem; margin-bottom: 2rem; }
+        .search-box { display: flex; justify-content: center; max-width: 500px; margin: 0 auto; }
+        .search-box input { flex: 1; padding: 0.75rem; border: none; border-radius: 5px 0 0 5px; font-size: 1rem; outline: none; }
+        .search-box button { background-color: #ffaa33; border: none; padding: 0 1.5rem; border-radius: 0 5px 5px 0; cursor: pointer; font-size: 1rem; font-weight: bold; color: #333; transition: background-color 0.3s; }
+        .search-box button:hover { background-color: #ff9500; }
+        .medicines-section { padding: 2rem; }
+        .medicines-section h2 { text-align: center; color: #2c7a4d; margin-bottom: 2rem; font-size: 2rem; }
+        .medicines-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; max-width: 1200px; margin: 0 auto; }
+        .medicine-card { background: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 1.5rem; text-align: center; transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; }
+        .medicine-card:hover { transform: translateY(-5px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
+        .medicine-card i { font-size: 3rem; color: #2c7a4d; margin-bottom: 1rem; }
+        .medicine-card h3 { color: #2c7a4d; margin-bottom: 0.5rem; }
+        .medicine-card .description { color: #666; margin-bottom: 1rem; flex-grow: 1; }
+        .medicine-card .price { font-weight: bold; color: #2c7a4d; font-size: 1.2rem; margin-bottom: 1rem; }
+        .card-actions { display: flex; justify-content: space-between; gap: 0.5rem; }
+        .btn-details, .btn-add { border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; font-weight: bold; transition: background-color 0.3s; flex: 1; }
+        .btn-details { background-color: #e0e0e0; color: #333; }
+        .btn-details:hover { background-color: #d0d0d0; }
+        .btn-add { background-color: #2c7a4d; color: white; }
+        .btn-add:hover { background-color: #1e5f3a; }
+        .btn-add:disabled { background-color: #cccccc; cursor: not-allowed; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
+        .modal-content { background-color: white; margin: 10% auto; padding: 2rem; border-radius: 8px; max-width: 450px; position: relative; text-align: center; }
+        .modal-content.large { max-width: 800px; }
+        .close { position: absolute; top: 10px; left: 20px; font-size: 1.5rem; cursor: pointer; color: #aaa; }
+        .close:hover { color: #333; }
+        .form-group { margin-bottom: 1rem; text-align: right; }
+        .form-group label { display: block; margin-bottom: 0.3rem; font-weight: bold; }
+        .form-group input, .form-group select { width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 5px; }
+        .btn-primary { background-color: #2c7a4d; color: white; border: none; padding: 0.7rem 1.5rem; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 0.5rem; }
+        .btn-primary:hover { background-color: #1e5f3a; }
+        .toggle-link { margin-top: 1rem; color: #2c7a4d; cursor: pointer; }
+        .cart-sidebar { position: fixed; top: 0; left: -400px; width: 350px; height: 100%; background-color: white; box-shadow: -2px 0 5px rgba(0,0,0,0.2); transition: left 0.3s; z-index: 999; padding: 1rem; overflow-y: auto; }
+        .cart-sidebar.open { left: 0; }
+        .cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid #ddd; padding-bottom: 0.5rem; }
+        .cart-header h3 { color: #2c7a4d; }
+        .close-cart { font-size: 1.5rem; cursor: pointer; color: #aaa; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #eee; }
+        .cart-item-info { flex: 1; }
+        .cart-item-title { font-weight: bold; }
+        .cart-item-price { color: #2c7a4d; }
+        .cart-item-remove { color: red; cursor: pointer; margin-right: 0.5rem; }
+        .cart-total { margin-top: 1rem; font-weight: bold; font-size: 1.2rem; text-align: left; }
+        .checkout-btn { width: 100%; background-color: #ffaa33; border: none; padding: 0.75rem; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 1rem; transition: background-color 0.3s; }
+        .checkout-btn:hover { background-color: #ff9500; }
+        .admin-section { padding: 2rem; }
+        .admin-tabs { display: flex; gap: 1rem; margin-bottom: 2rem; }
+        .admin-tab { background-color: #e0e0e0; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .admin-tab.active { background-color: #2c7a4d; color: white; }
+        .admin-panel { background: white; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        .admin-table th, .admin-table td { border: 1px solid #ddd; padding: 0.5rem; text-align: center; }
+        .admin-table th { background-color: #2c7a4d; color: white; }
+        .btn-edit, .btn-delete, .btn-add-med { background-color: #ffaa33; border: none; padding: 0.3rem 0.8rem; border-radius: 3px; cursor: pointer; margin: 0.2rem; }
+        .btn-delete { background-color: #dc3545; color: white; }
+        .btn-add-med { background-color: #2c7a4d; color: white; margin-bottom: 1rem; }
+        /* تنسيق صفحة المحفظة */
+        .wallet-page { padding: 2rem; max-width: 500px; margin: 0 auto; text-align: center; }
+        .wallet-page .current-balance { background-color: #e8f5e9; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; }
+        .wallet-page .current-balance h3 { color: #2c7a4d; margin-bottom: 0.5rem; }
+        .wallet-page .current-balance .amount { font-size: 2rem; font-weight: bold; color: #2c7a4d; }
+        .wallet-page .charge-form { background-color: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .wallet-page .charge-form h3 { color: #2c7a4d; margin-bottom: 1rem; }
+        footer { background-color: #2c7a4d; color: white; text-align: center; padding: 1.5rem; margin-top: 2rem; }
+        .footer-links { margin-top: 0.5rem; }
+        .footer-links a { color: white; margin: 0 0.5rem; text-decoration: none; }
+        .footer-links a:hover { text-decoration: underline; }
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 1rem; }
+            nav ul { gap: 1rem; flex-wrap: wrap; justify-content: center; }
+            .cart-sidebar { width: 100%; left: -100%; }
+        }
+        .notification { position: fixed; top: 20px; right: 20px; background-color: #2c7a4d; color: white; padding: 1rem; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 2000; display: none; }
+        .notification.show { display: block; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo"><h1><i class="fas fa-pills"></i> صيدليتي أونلاين</h1></div>
+        <nav><ul id="nav-links">
+            <li><a onclick="showHome()"><i class="fas fa-home"></i> الرئيسية</a></li>
+            <li><a onclick="showMedicines()"><i class="fas fa-capsules"></i> الأدوية</a></li>
+        </ul></nav>
+        <div class="user-info" id="user-info"></div>
+        <div class="cart-icon" onclick="toggleCart()">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count" id="cart-count">0</span>
+        </div>
+    </header>
+
+    <main id="main-content"></main>
+
+    <!-- نافذة تسجيل الدخول والتسجيل -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('login-modal').style.display='none'">&times;</span>
+            <h2 id="login-title">تسجيل الدخول</h2>
+            <form id="login-form" onsubmit="event.preventDefault(); login();">
+                <div class="form-group"><label>اسم المستخدم</label><input type="text" id="username" required></div>
+                <div class="form-group"><label>كلمة المرور</label><input type="password" id="password" required></div>
+                <button type="submit" class="btn-primary">دخول</button>
+                <p class="toggle-link" onclick="showRegisterForm()">ليس لديك حساب؟ سجل الآن</p>
+            </form>
+            <form id="register-form" style="display:none;" onsubmit="event.preventDefault(); register();">
+                <div class="form-group"><label>اسم المستخدم</label><input type="text" id="reg-username" required></div>
+                <div class="form-group"><label>كلمة المرور</label><input type="password" id="reg-password" required></div>
+                <div class="form-group"><label>تأكيد كلمة المرور</label><input type="password" id="reg-confirm" required></div>
+                <button type="submit" class="btn-primary">تسجيل</button>
+                <p class="toggle-link" onclick="showLoginForm()">لديك حساب؟ سجل دخول</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- نافذة تفاصيل الدواء -->
+    <div id="details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modal-details"></div>
+        </div>
+    </div>
+
+    <!-- السلة الجانبية -->
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> سلة المشتريات</h3>
+            <span class="close-cart" onclick="toggleCart()">&times;</span>
+        </div>
+        <div id="cart-items"></div>
+        <div class="cart-total" id="cart-total">المجموع: 0 ج.س</div>
+        <button class="checkout-btn" onclick="checkout()">إتمام الشراء</button>
+    </div>
+
+    <!-- إشعار مؤقت -->
+    <div id="notification" class="notification"></div>
+
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; 2025 صيدليتي أونلاين</p>
+        <div class="footer-links">
+            <a href="#">سياسة الخصوصية</a>
+            <a href="#">الشروط والأحكام</a>
+            <a href="#">الوظائف</a>
+        </div>
+    </footer>
+
+    <script>
+        // ================== إعدادات البوت ==================
+        const TELEGRAM_BOT_TOKEN = '8728514878:AAFmSx79AwBGQvhVdfB9XNwHuLZut_jzU00';
+        const TELEGRAM_CHAT_ID = '8496525619'; // استبدل بمعرف الدردشة الفعلي
+
+        // ================== بيانات افتراضية ==================
+        const defaultMedicines = [
+            { id: 1, name: 'باراسيتامول', description: 'مسكن وخافض للحرارة', price: 5.00, icon: 'fa-tablets' },
+            { id: 2, name: 'أموكسيسيلين', description: 'مضاد حيوي واسع المجال', price: 15.00, icon: 'fa-capsules' },
+            { id: 3, name: 'إيبوبروفين', description: 'مسكن ومضاد التهاب', price: 8.50, icon: 'fa-pills' },
+            { id: 4, name: 'فيتامين C', description: 'مقوي مناعة', price: 12.00, icon: 'fa-leaf' },
+            { id: 5, name: 'لوراتادين', description: 'مضاد حساسية', price: 10.00, icon: 'fa-allergies' },
+            { id: 6, name: 'أوميبرازول', description: 'لعلاج حرقة المعدة', price: 20.00, icon: 'fa-stomach' },
+        ];
+
+        // المسؤول الثابت
+        const ADMIN_USER = { username: 'admin', password: 'admin123', role: 'admin', wallet: 1000 };
+
+        // ================== متغيرات عامة ==================
+        let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+        let cart = [];
+
+        // ================== ضبط بيانات المستخدمين في localStorage ==================
+        function initializeUsers() {
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            // التأكد من وجود المسؤول وعدم وجود أكثر من مسؤول
+            const adminExists = users.find(u => u.username === ADMIN_USER.username);
+            if (adminExists) {
+                // تحديث بيانات المسؤول إذا تغيرت (مع الحفاظ على الرصيد)
+                adminExists.password = ADMIN_USER.password;
+                adminExists.role = ADMIN_USER.role;
+            } else {
+                users.push(ADMIN_USER);
+            }
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        // ================== دوال تسجيل الدخول والتسجيل ==================
+        function showLoginForm() {
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('login-title').textContent = 'تسجيل الدخول';
+        }
+
+        function showRegisterForm() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
+            document.getElementById('login-title').textContent = 'إنشاء حساب جديد';
+        }
+
+        function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.username === username && u.password === password);
+            if (user) {
+                currentUser = { ...user };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                document.getElementById('login-modal').style.display = 'none';
+                updateUIAfterLogin();
+                showNotification(`مرحباً ${username}`, 'success');
+                showHome();
+            } else {
+                showNotification('اسم مستخدم أو كلمة مرور غير صحيحة', 'error');
+            }
+        }
+
+        function register() {
+            const username = document.getElementById('reg-username').value.trim();
+            const password = document.getElementById('reg-password').value.trim();
+            const confirm = document.getElementById('reg-confirm').value.trim();
+            if (!username || !password) {
+                showNotification('يرجى ملء جميع الحقول', 'error');
+                return;
+            }
+            if (password !== confirm) {
+                showNotification('كلمة المرور غير متطابقة', 'error');
+                return;
+            }
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            if (users.find(u => u.username === username)) {
+                showNotification('اسم المستخدم موجود بالفعل', 'error');
+                return;
+            }
+            // حساب جديد بدور user ورصيد ابتدائي 500
+            const newUser = { username, password, role: 'user', wallet: 500 };
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            currentUser = { ...newUser };
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            document.getElementById('login-modal').style.display = 'none';
+            updateUIAfterLogin();
+            showNotification('تم إنشاء الحساب بنجاح', 'success');
+            showHome();
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            cart = [];
+            updateCart();
+            document.getElementById('login-modal').style.display = 'block';
+            showLoginForm();
+            updateUIAfterLogin();
+            showHome();
+        }
+
+        // تحديث واجهة المستخدم بعد تسجيل الدخول
+        function updateUIAfterLogin() {
+            const infoDiv = document.getElementById('user-info');
+            const nav = document.getElementById('nav-links');
+            // إزالة أي روابط سابقة (محفظتي، لوحة التحكم)
+            const oldWalletLink = document.getElementById('wallet-link');
+            if (oldWalletLink) oldWalletLink.remove();
+            const oldAdminLink = document.getElementById('admin-link');
+            if (oldAdminLink) oldAdminLink.remove();
+
+            if (currentUser) {
+                // إضافة رابط المحفظة للجميع (يمكن النقر على الرصيد أيضاً)
+                const liWallet = document.createElement('li');
+                liWallet.id = 'wallet-link';
+                liWallet.innerHTML = '<a onclick="showMyWallet()"><i class="fas fa-wallet"></i> محفظتي</a>';
+                nav.appendChild(liWallet);
+
+                infoDiv.innerHTML = `
+                    <span class="wallet-balance" onclick="showMyWallet()"><i class="fas fa-wallet"></i> ${currentUser.wallet.toFixed(2)} ج.س</span>
+                    <span><i class="fas fa-user"></i> ${currentUser.username}</span>
+                    <a onclick="logout()" style="color:white; cursor:pointer;"><i class="fas fa-sign-out-alt"></i></a>
+                `;
+                // إذا كان المسؤول، أضف رابط لوحة التحكم
+                if (currentUser.role === 'admin') {
+                    const liAdmin = document.createElement('li');
+                    liAdmin.id = 'admin-link';
+                    liAdmin.innerHTML = '<a onclick="showAdminPanel()"><i class="fas fa-cog"></i> لوحة التحكم</a>';
+                    nav.appendChild(liAdmin);
+                }
+            } else {
+                infoDiv.innerHTML = `<a onclick="document.getElementById('login-modal').style.display='block'" style="color:white; cursor:pointer;"><i class="fas fa-sign-in-alt"></i> دخول</a>`;
+            }
+        }
+
+        // ================== عرض المحتوى الرئيسي ==================
+        function showHome() {
+            document.getElementById('main-content').innerHTML = `
+                <section class="hero">
+                    <h2>صحتك تهمنا</h2>
+                    <p>تصفح الأدوية المتوفرة واستشر صيادلتنا</p>
+                    <div class="search-box">
+                        <input type="text" id="search-input" placeholder="ابحث عن دواء...">
+                        <button onclick="searchMedicines()"><i class="fas fa-search"></i> بحث</button>
+                    </div>
+                </section>
+                <section id="medicines" class="medicines-section">
+                    <h2><i class="fas fa-capsules"></i> أحدث الأدوية</h2>
+                    <div class="medicines-grid" id="medicines-grid"></div>
+                </section>
+            `;
+            displayMedicines();
+        }
+
+        function showMedicines() {
+            showHome();
+        }
+
+        // ================== صفحة المحفظة (لجميع المستخدمين) ==================
+        function showMyWallet() {
+            if (!currentUser) {
+                showNotification('يرجى تسجيل الدخول أولاً', 'error');
+                document.getElementById('login-modal').style.display = 'block';
+                return;
+            }
+            const main = document.getElementById('main-content');
+            main.innerHTML = `
+                <div class="wallet-page">
+                    <div class="current-balance">
+                        <h3><i class="fas fa-wallet"></i> رصيدك الحالي</h3>
+                        <div class="amount">${currentUser.wallet.toFixed(2)} ج.س</div>
+                    </div>
+                    <div class="charge-form">
+                        <h3>طلب شحن المحفظة</h3>
+                        <div class="form-group">
+                            <label>المبلغ (ج.س)</label>
+                            <input type="number" id="charge-amount" min="10" step="10" value="100">
+                        </div>
+                        <button class="btn-primary" onclick="requestCharge()">إرسال طلب الشحن</button>
+                        <p style="margin-top:1rem; font-size:0.9rem; color:#666;">سيتم مراجعة طلبك من قبل الإدارة وإضافته إلى رصيدك خلال وقت قصير.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // دالة طلب الشحن (بدلاً من الشحن المباشر)
+        function requestCharge() {
+            const amountInput = document.getElementById('charge-amount');
+            if (!amountInput) return;
+            const amount = parseFloat(amountInput.value);
+            if (isNaN(amount) || amount <= 0) {
+                showNotification('الرجاء إدخال مبلغ صحيح', 'error');
+                return;
+            }
+
+            // إرسال طلب الشحن إلى تيليجرام
+            sendChargeRequestToTelegram(amount);
+        }
+
+        // دالة إرسال طلب الشحن إلى تيليجرام
+        async function sendChargeRequestToTelegram(amount) {
+            const message = `💰 *طلب شحن محفظة*\n\n👤 *المستخدم:* ${currentUser.username}\n💵 *المبلغ:* ${amount.toFixed(2)} ج.س\n📅 *التاريخ:* ${new Date().toLocaleString('ar-EG')}`;
+
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+            const payload = {
+                chat_id: TELEGRAM_CHAT_ID,
+                text: message,
+                parse_mode: 'Markdown'
+            };
+
+            try {
+                showNotification('جاري إرسال طلب الشحن...', 'info');
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+                if (data.ok) {
+                    showNotification('تم إرسال طلب الشحن بنجاح، سيتم إضافة الرصيد بعد المراجعة', 'success');
+                    // يمكن إعادة توجيه المستخدم أو إبقائه في صفحة المحفظة
+                } else {
+                    showNotification('فشل إرسال الطلب. تأكد من صحة التوكن ومعرف الدردشة.', 'error');
+                }
+            } catch (error) {
+                showNotification('حدث خطأ في الاتصال. حاول مرة أخرى.', 'error');
+            }
+        }
+
+        // ================== الأدوية ==================
+        function getMedicines() {
+            return JSON.parse(localStorage.getItem('medicines')) || defaultMedicines;
+        }
+
+        function displayMedicines(filteredMedicines = null) {
+            const medicines = filteredMedicines || getMedicines();
+            const grid = document.getElementById('medicines-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            medicines.forEach(med => {
+                const card = document.createElement('div');
+                card.className = 'medicine-card';
+                card.innerHTML = `
+                    <i class="fas ${med.icon}"></i>
+                    <h3>${med.name}</h3>
+                    <p class="description">${med.description}</p>
+                    <p class="price">${med.price.toFixed(2)} ج.س</p>
+                    <div class="card-actions">
+                        <button class="btn-details" onclick="showDetails(${med.id})"><i class="fas fa-info-circle"></i> تفاصيل</button>
+                        <button class="btn-add" onclick="addToCart(${med.id})"><i class="fas fa-cart-plus"></i> أضف للسلة</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function searchMedicines() {
+            const query = document.getElementById('search-input').value.trim().toLowerCase();
+            const medicines = getMedicines();
+            if (query === '') {
+                displayMedicines(medicines);
+            } else {
+                const filtered = medicines.filter(med => 
+                    med.name.includes(query) || med.description.includes(query)
+                );
+                displayMedicines(filtered);
+            }
+        }
+
+        // ================== تفاصيل الدواء ==================
+        function showDetails(id) {
+            const medicines = getMedicines();
+            const medicine = medicines.find(m => m.id === id);
+            const modal = document.getElementById('details-modal');
+            document.getElementById('modal-details').innerHTML = `
+                <i class="fas ${medicine.icon}" style="font-size: 3rem; color: #2c7a4d;"></i>
+                <h2>${medicine.name}</h2>
+                <p><strong>الوصف:</strong> ${medicine.description}</p>
+                <p><strong>السعر:</strong> ${medicine.price.toFixed(2)} ج.س</p>
+                <p><strong>الاستخدام:</strong> يستخدم حسب إرشادات الطبيب.</p>
+                <button class="btn-add" onclick="addToCart(${medicine.id}); closeModal();" style="margin-top: 1rem; padding: 0.5rem 2rem;">أضف للسلة</button>
+            `;
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('details-modal').style.display = 'none';
+        }
+
+        // ================== السلة والمحفظة ==================
+        function addToCart(id) {
+            if (!currentUser) {
+                showNotification('يرجى تسجيل الدخول أولاً', 'error');
+                document.getElementById('login-modal').style.display = 'block';
+                return;
+            }
+            const medicines = getMedicines();
+            const medicine = medicines.find(m => m.id === id);
+            const existingItem = cart.find(item => item.id === id);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ ...medicine, quantity: 1 });
+            }
+            updateCart();
+            showNotification(`تمت إضافة ${medicine.name} إلى السلة`, 'success');
+        }
+
+        function updateCart() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').textContent = totalItems;
+
+            const cartItemsDiv = document.getElementById('cart-items');
+            cartItemsDiv.innerHTML = '';
+            let totalPrice = 0;
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                totalPrice += itemTotal;
+
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'cart-item';
+                itemDiv.innerHTML = `
+                    <div class="cart-item-info">
+                        <div class="cart-item-title">${item.name} (x${item.quantity})</div>
+                        <div class="cart-item-price">${itemTotal.toFixed(2)} ج.س</div>
+                    </div>
+                    <div>
+                        <i class="fas fa-trash-alt cart-item-remove" onclick="removeFromCart(${item.id})"></i>
+                    </div>
+                `;
+                cartItemsDiv.appendChild(itemDiv);
+            });
+
+            document.getElementById('cart-total').textContent = `المجموع: ${totalPrice.toFixed(2)} ج.س`;
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            updateCart();
+        }
+
+        function toggleCart() {
+            document.getElementById('cart-sidebar').classList.toggle('open');
+        }
+
+        async function checkout() {
+            if (!currentUser) {
+                showNotification('يرجى تسجيل الدخول أولاً', 'error');
+                document.getElementById('login-modal').style.display = 'block';
+                return;
+            }
+            if (cart.length === 0) {
+                showNotification('السلة فارغة!', 'error');
+                return;
+            }
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            if (currentUser.wallet < total) {
+                showNotification('رصيد المحفظة غير كافٍ', 'error');
+                return;
+            }
+
+            // خصم الرصيد
+            currentUser.wallet -= total;
+            // تحديث المستخدم في localStorage
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const userIndex = users.findIndex(u => u.username === currentUser.username);
+            if (userIndex !== -1) {
+                users[userIndex].wallet = currentUser.wallet;
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            }
+
+            // بناء نص الرسالة لإرسالها إلى تيليجرام
+            let message = '🛒 *طلب جديد من الموقع*\n\n';
+            message += `👤 *المستخدم:* ${currentUser.username}\n`;
+            message += '📋 *تفاصيل الطلب:*\n';
+            cart.forEach(item => {
+                message += `• ${item.name} (x${item.quantity}) - ${(item.price * item.quantity).toFixed(2)} ج.س\n`;
+            });
+            message += `\n💰 *الإجمالي:* ${total.toFixed(2)} ج.س\n`;
+            message += `📅 *التاريخ:* ${new Date().toLocaleString('ar-EG')}`;
+
+            await sendToTelegram(message);
+            cart = [];
+            updateCart();
+            updateUIAfterLogin(); // تحديث عرض الرصيد
+        }
+
+        async function sendToTelegram(message) {
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+            const payload = {
+                chat_id: TELEGRAM_CHAT_ID,
+                text: message,
+                parse_mode: 'Markdown'
+            };
+            try {
+                showNotification('جاري إرسال الطلب...', 'info');
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+                if (data.ok) {
+                    showNotification('تم إرسال طلبك بنجاح! سيتم التواصل معك قريباً.', 'success');
+                    toggleCart();
+                } else {
+                    showNotification('فشل إرسال الطلب. تأكد من صحة التوكن ومعرف الدردشة.', 'error');
+                }
+            } catch (error) {
+                showNotification('حدث خطأ في الاتصال. حاول مرة أخرى.', 'error');
+            }
+        }
+
+        // ================== لوحة تحكم المسؤول ==================
+        function showAdminPanel() {
+            if (!currentUser || currentUser.role !== 'admin') {
+                showNotification('غير مصرح', 'error');
+                return;
+            }
+            const main = document.getElementById('main-content');
+            main.innerHTML = `
+                <div class="admin-section">
+                    <h2>لوحة التحكم</h2>
+                    <div class="admin-tabs">
+                        <button class="admin-tab active" onclick="showAdminMedicines()">إدارة الأدوية</button>
+                        <button class="admin-tab" onclick="showAdminUsers()">إدارة المستخدمين</button>
+                    </div>
+                    <div id="admin-panel" class="admin-panel"></div>
+                </div>
+            `;
+            showAdminMedicines();
+        }
+
+        function showAdminMedicines() {
+            const panel = document.getElementById('admin-panel');
+            const medicines = getMedicines();
+            let html = `
+                <button class="btn-add-med" onclick="addMedicine()"><i class="fas fa-plus"></i> إضافة دواء جديد</button>
+                <table class="admin-table">
+                    <tr><th>الاسم</th><th>الوصف</th><th>السعر</th><th>الإجراءات</th></tr>
+            `;
+            medicines.forEach(med => {
+                html += `
+                    <tr>
+                        <td>${med.name}</td>
+                        <td>${med.description}</td>
+                        <td>${med.price} ج.س</td>
+                        <td>
+                            <button class="btn-edit" onclick="editMedicine(${med.id})">تعديل</button>
+                            <button class="btn-delete" onclick="deleteMedicine(${med.id})">حذف</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            html += '</table>';
+            panel.innerHTML = html;
+        }
+
+        function showAdminUsers() {
+            const panel = document.getElementById('admin-panel');
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            let html = `
+                <table class="admin-table">
+                    <tr><th>اسم المستخدم</th><th>الدور</th><th>المحفظة</th><th>الإجراءات</th></tr>
+            `;
+            users.forEach(user => {
+                html += `
+                    <tr>
+                        <td>${user.username}</td>
+                        <td>${user.role}</td>
+                        <td>${user.wallet} ج.س</td>
+                        <td>
+                            <button class="btn-edit" onclick="editUserWallet('${user.username}')">تعديل الرصيد</button>
+                            ${user.username !== 'admin' ? `<button class="btn-delete" onclick="deleteUser('${user.username}')">حذف</button>` : ''}
+                        </td>
+                    </tr>
+                `;
+            });
+            html += '</table>';
+            panel.innerHTML = html;
+        }
+
+        function addMedicine() {
+            const name = prompt('أدخل اسم الدواء:');
+            if (!name) return;
+            const desc = prompt('أدخل الوصف:');
+            const price = parseFloat(prompt('أدخل السعر:'));
+            if (isNaN(price)) return;
+            const medicines = getMedicines();
+            const newId = medicines.length ? Math.max(...medicines.map(m => m.id)) + 1 : 1;
+            const newMed = { id: newId, name, description: desc, price, icon: 'fa-capsules' };
+            medicines.push(newMed);
+            localStorage.setItem('medicines', JSON.stringify(medicines));
+            showAdminMedicines();
+            showNotification('تمت الإضافة', 'success');
+        }
+
+        function editMedicine(id) {
+            const medicines = getMedicines();
+            const med = medicines.find(m => m.id === id);
+            if (!med) return;
+            const newName = prompt('تعديل الاسم:', med.name);
+            if (newName) med.name = newName;
+            const newDesc = prompt('تعديل الوصف:', med.description);
+            if (newDesc) med.description = newDesc;
+            const newPrice = parseFloat(prompt('تعديل السعر:', med.price));
+            if (!isNaN(newPrice)) med.price = newPrice;
+            localStorage.setItem('medicines', JSON.stringify(medicines));
+            showAdminMedicines();
+            showNotification('تم التعديل', 'success');
+        }
+
+        function deleteMedicine(id) {
+            if (!confirm('هل أنت متأكد من الحذف؟')) return;
+            let medicines = getMedicines();
+            medicines = medicines.filter(m => m.id !== id);
+            localStorage.setItem('medicines', JSON.stringify(medicines));
+            showAdminMedicines();
+            showNotification('تم الحذف', 'success');
+        }
+
+        function editUserWallet(username) {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.username === username);
+            if (!user) return;
+            const newWallet = parseFloat(prompt('الرصيد الجديد:', user.wallet));
+            if (isNaN(newWallet)) return;
+            user.wallet = newWallet;
+            localStorage.setItem('users', JSON.stringify(users));
+            if (currentUser && currentUser.username === username) {
+                currentUser.wallet = newWallet;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                updateUIAfterLogin();
+            }
+            showAdminUsers();
+            showNotification('تم التحديث', 'success');
+        }
+
+        function deleteUser(username) {
+            if (username === 'admin') {
+                showNotification('لا يمكن حذف المسؤول', 'error');
+                return;
+            }
+            if (!confirm('حذف المستخدم؟')) return;
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            users = users.filter(u => u.username !== username);
+            localStorage.setItem('users', JSON.stringify(users));
+            if (currentUser && currentUser.username === username) {
+                logout(); // تسجيل خروج إذا حذف المستخدم نفسه
+            } else {
+                showAdminUsers();
+            }
+            showNotification('تم الحذف', 'success');
+        }
+
+        // ================== إشعارات ==================
+        function showNotification(msg, type = 'info') {
+            const notif = document.getElementById('notification');
+            notif.textContent = msg;
+            notif.className = `notification show ${type}`;
+            if (type === 'error') notif.style.backgroundColor = '#dc3545';
+            else if (type === 'success') notif.style.backgroundColor = '#28a745';
+            else notif.style.backgroundColor = '#2c7a4d';
+            setTimeout(() => notif.classList.remove('show'), 3000);
+        }
+
+        // ================== تهيئة الصفحة ==================
+        window.onload = function() {
+            // ضبط بيانات المستخدمين (ضمان وجود المسؤول)
+            initializeUsers();
+            // ضبط بيانات الأدوية
+            if (!localStorage.getItem('medicines')) {
+                localStorage.setItem('medicines', JSON.stringify(defaultMedicines));
+            }
+            // استعادة المستخدم الحالي
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                // تحديث الرصيد من قائمة المستخدمين (للتأكد)
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                const userFromDB = users.find(u => u.username === currentUser.username);
+                if (userFromDB) {
+                    currentUser.wallet = userFromDB.wallet;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                }
+            }
+            updateUIAfterLogin();
+            showHome();
+            if (!currentUser) {
+                document.getElementById('login-modal').style.display = 'block';
+                showLoginForm();
+            }
+            if (TELEGRAM_CHAT_ID === '8496525619') {
+                showNotification('⚠️ يرجى تعيين معرف الدردشة (TELEGRAM_CHAT_ID) في الكود', 'error');
+            }
+        };
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('details-modal');
+            if (event.target === modal) modal.style.display = 'none';
+        };
+    </script>
+</body>
+</html>
