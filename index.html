@@ -27,7 +27,6 @@
             overflow-x: hidden;
         }
 
-        /* Navbar & Offcanvas */
         .navbar {
             background: var(--white);
             box-shadow: 0 2px 15px rgba(0,0,0,0.05);
@@ -74,7 +73,6 @@
             }
         }
 
-        /* Hero Section */
         .hero-section {
             background: linear-gradient(135deg, var(--medical-light) 0%, var(--medical-blue) 100%);
             color: var(--white);
@@ -117,7 +115,6 @@
             color: white;
         }
 
-        /* Cards */
         .card-custom {
             border: none;
             border-radius: 1.2rem;
@@ -138,7 +135,6 @@
             margin-bottom: 2rem;
         }
 
-        /* Status Badge */
         .status-badge {
             border-radius: 50px;
             padding: 4px 12px;
@@ -156,7 +152,6 @@
             color: #842029;
         }
 
-        /* Filter Buttons */
         .filter-buttons .btn-outline-primary {
             border-color: var(--medical-blue);
             color: var(--medical-blue);
@@ -168,7 +163,6 @@
             color: white;
         }
 
-        /* Loader */
         .loader {
             display: inline-block;
             width: 2rem;
@@ -191,7 +185,6 @@
             border-top: 1px solid #edf2f7;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .hero-title {
                 font-size: 1.6rem;
@@ -344,24 +337,65 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // ---------- البيانات الموسعة (سهولة التوسع عبر API لاحقاً) ----------
-    const pharmaciesData = [
-        { name: "صيدلية النور", location: "الخرطوم - الرياض", phone: "0912345678", icon: "fa-hospital" },
-        { name: "صيدلية مكة", location: "أم درمان - الثورة", phone: "0912111222", icon: "fa-clinic-medical" },
-        { name: "صيدلية السلام", location: "بحري - شمبات", phone: "0123000999", icon: "fa-house-medical" },
-        { name: "صيدلية ابن سينا", location: "الخرطوم - المعمورة", phone: "0965444333", icon: "fa-kit-medical" }
-    ];
+    // ---------- بيانات متزامنة مع localStorage (من لوحة المسؤول) ----------
+    let pharmacies = [];
+    let drugs = [];
 
-    const drugsData = [
-        { name: "بانادول", pharmacy: "صيدلية النور", price: "1200", status: "available", pharmacyPhone: "0912345678" },
-        { name: "أوميبرازول", pharmacy: "صيدلية مكة", price: "3500", status: "available", pharmacyPhone: "0912111222" },
-        { name: "أوجمنتين", pharmacy: "صيدلية السلام", price: "8000", status: "unavailable", pharmacyPhone: "0123000999" },
-        { name: "باراسيتامول", pharmacy: "صيدلية ابن سينا", price: "900", status: "available", pharmacyPhone: "0965444333" },
-        { name: "سبازموكان", pharmacy: "صيدلية النور", price: "2500", status: "available", pharmacyPhone: "0912345678" },
-        { name: "سيتال", pharmacy: "صيدلية مكة", price: "500", status: "unavailable", pharmacyPhone: "0912111222" }
-    ];
+    // تحميل البيانات من localStorage أو إنشاء بيانات افتراضية
+    function loadData() {
+        const storedPharmacies = localStorage.getItem('pharmacies');
+        const storedDrugs = localStorage.getItem('drugs');
+        
+        if (storedPharmacies) {
+            pharmacies = JSON.parse(storedPharmacies);
+        } else {
+            // بيانات افتراضية متوافقة مع هيكل admin.html
+            pharmacies = [
+                { id: 1, name: "صيدلية النور", location: "الخرطوم - الرياض", phone: "0912345678", icon: "fa-hospital" },
+                { id: 2, name: "صيدلية مكة", location: "أم درمان - الثورة", phone: "0912111222", icon: "fa-clinic-medical" },
+                { id: 3, name: "صيدلية السلام", location: "بحري - شمبات", phone: "0123000999", icon: "fa-house-medical" },
+                { id: 4, name: "صيدلية ابن سينا", location: "الخرطوم - المعمورة", phone: "0965444333", icon: "fa-kit-medical" }
+            ];
+            localStorage.setItem('pharmacies', JSON.stringify(pharmacies));
+        }
 
-    // متغيرات الحالة
+        if (storedDrugs) {
+            drugs = JSON.parse(storedDrugs);
+        } else {
+            drugs = [
+                { id: 1, name: "بانادول", pharmacyId: 1, price: "1200", status: "available" },
+                { id: 2, name: "أوميبرازول", pharmacyId: 2, price: "3500", status: "available" },
+                { id: 3, name: "أوجمنتين", pharmacyId: 3, price: "8000", status: "unavailable" },
+                { id: 4, name: "باراسيتامول", pharmacyId: 4, price: "900", status: "available" },
+                { id: 5, name: "سبازموكان", pharmacyId: 1, price: "2500", status: "available" },
+                { id: 6, name: "سيتال", pharmacyId: 2, price: "500", status: "unavailable" }
+            ];
+            localStorage.setItem('drugs', JSON.stringify(drugs));
+        }
+    }
+
+    // الحصول على معلومات الصيدلية بواسطة المعرف
+    function getPharmacyById(id) {
+        return pharmacies.find(p => p.id === id);
+    }
+
+    // عرض الصيدليات
+    function renderPharmacies() {
+        const list = document.getElementById('pharmaciesList');
+        if (!list) return;
+        list.innerHTML = pharmacies.map(p => `
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-custom p-3 text-center h-100">
+                    <i class="fas ${p.icon} fa-3x text-primary mb-3"></i>
+                    <h6 class="fw-bold">${p.name}</h6>
+                    <p class="small text-muted mb-3"><i class="fas fa-map-marker-alt"></i> ${p.location}</p>
+                    <a href="tel:${p.phone}" class="btn btn-sm btn-outline-primary rounded-pill w-100 mt-auto">اتصال مباشر</a>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // متغيرات البحث
     let currentSearchTerm = "";
     let currentResults = [];
     let currentFilter = "all";
@@ -374,34 +408,17 @@
     // عرض الأقسام
     function showSection(id) {
         document.querySelectorAll('.content-section').forEach(s => s.style.display = 'none');
-        document.getElementById(id).style.display = 'block';
+        const section = document.getElementById(id);
+        if (section) section.style.display = 'block';
 
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
         const activeLink = document.querySelector(`[onclick="showSection('${id}')"]`);
         if (activeLink) activeLink.classList.add('active');
 
         if (id === 'pharmaciesSection') renderPharmacies();
-        if (id === 'homeSection') {
-            // إعادة تعيين حقل البحث إذا أردنا
-        }
     }
 
-    // عرض الصيدليات
-    function renderPharmacies() {
-        const list = document.getElementById('pharmaciesList');
-        list.innerHTML = pharmaciesData.map(p => `
-            <div class="col-md-6 col-lg-3">
-                <div class="card card-custom p-3 text-center h-100">
-                    <i class="fas ${p.icon} fa-3x text-primary mb-3"></i>
-                    <h6 class="fw-bold">${p.name}</h6>
-                    <p class="small text-muted mb-3"><i class="fas fa-map-marker-alt"></i> ${p.location}</p>
-                    <a href="tel:${p.phone}" class="btn btn-sm btn-outline-primary rounded-pill w-100 mt-auto">اتصال مباشر</a>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    // البحث (محاكاة تأخير لإظهار مؤشر التحميل)
+    // البحث
     async function handleSearch() {
         const query = document.getElementById("searchInput").value.trim();
         if (!query) {
@@ -409,34 +426,29 @@
             return;
         }
 
-        // حفظ آخر بحث
         localStorage.setItem("lastSearch", query);
         currentSearchTerm = query;
         document.getElementById("searchTerm").innerText = query;
 
-        // عرض مؤشر التحميل
         const grid = document.getElementById("resultsGrid");
         grid.innerHTML = `<div class="col-12 text-center py-5"><div class="loader"></div><p class="mt-2">جاري البحث...</p></div>`;
         showSection('resultsSection');
 
-        // محاكاة وقت تحميل (لإظهار مؤشر التحميل بوضوح)
         await new Promise(resolve => setTimeout(resolve, 500));
 
-        // تنفيذ البحث (غير حساس لحالة الأحرف)
         const lowerQuery = query.toLowerCase();
-        currentResults = drugsData.filter(drug =>
-            drug.name.toLowerCase().includes(lowerQuery) ||
-            drug.pharmacy.toLowerCase().includes(lowerQuery) ||
-            (drug.location && drug.location.toLowerCase().includes(lowerQuery))
-        );
+        currentResults = drugs.filter(drug => {
+            const pharmacy = getPharmacyById(drug.pharmacyId);
+            const pharmacyName = pharmacy ? pharmacy.name : '';
+            return drug.name.toLowerCase().includes(lowerQuery) ||
+                   pharmacyName.toLowerCase().includes(lowerQuery);
+        });
 
-        // تطبيق الفلتر الافتراضي (الكل)
         currentFilter = "all";
         updateFilterButtons();
         displayFilteredResults();
     }
 
-    // عرض النتائج حسب الفلتر الحالي
     function displayFilteredResults() {
         let filtered = [...currentResults];
         if (currentFilter === "available") {
@@ -452,34 +464,41 @@
             return;
         }
 
-        grid.innerHTML = filtered.map(drug => `
-            <div class="col-md-6">
-                <div class="card card-custom p-3 h-100">
-                    <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
-                        <h5 class="fw-bold text-primary">${drug.name}</h5>
-                        <span class="status-badge ${drug.status}">${drug.status === 'available' ? 'متوفر' : 'غير متوفر'}</span>
-                    </div>
-                    <p class="mb-1 text-muted"><i class="fas fa-store"></i> ${drug.pharmacy}</p>
-                    <p class="fw-bold text-success mb-2">${drug.price} ج.س</p>
-                    <div class="d-flex gap-2 mt-auto">
-                        <button class="btn btn-sm btn-medical rounded-pill w-100" onclick="requestMedicine('${drug.name}', '${drug.pharmacyPhone}', '${drug.pharmacy}')">
-                            <i class="fab fa-whatsapp"></i> طلب عبر واتساب
-                        </button>
-                        <a href="tel:${drug.pharmacyPhone}" class="btn btn-sm btn-outline-primary rounded-pill w-100">اتصال</a>
+        grid.innerHTML = filtered.map(drug => {
+            const pharmacy = getPharmacyById(drug.pharmacyId);
+            const pharmacyName = pharmacy ? pharmacy.name : 'غير معروف';
+            const pharmacyPhone = pharmacy ? pharmacy.phone : '';
+            return `
+                <div class="col-md-6">
+                    <div class="card card-custom p-3 h-100">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                            <h5 class="fw-bold text-primary">${drug.name}</h5>
+                            <span class="status-badge ${drug.status}">${drug.status === 'available' ? 'متوفر' : 'غير متوفر'}</span>
+                        </div>
+                        <p class="mb-1 text-muted"><i class="fas fa-store"></i> ${pharmacyName}</p>
+                        <p class="fw-bold text-success mb-2">${drug.price} ج.س</p>
+                        <div class="d-flex gap-2 mt-auto">
+                            <button class="btn btn-sm btn-medical rounded-pill w-100" onclick="requestMedicine('${drug.name}', '${pharmacyPhone}', '${pharmacyName}')">
+                                <i class="fab fa-whatsapp"></i> طلب عبر واتساب
+                            </button>
+                            <a href="tel:${pharmacyPhone}" class="btn btn-sm btn-outline-primary rounded-pill w-100">اتصال</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
     }
 
-    // طلب الدواء عبر واتساب
     function requestMedicine(drugName, phone, pharmacyName) {
+        if (!phone) {
+            alert("رقم الهاتف غير متوفر لهذه الصيدلية.");
+            return;
+        }
         const message = `السلام عليكم، أرغب في الاستفسار عن دواء ${drugName} في صيدلية ${pharmacyName}.`;
         const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
     }
 
-    // تحديث أزرار الفلتر وإضافة الأحداث
     function updateFilterButtons() {
         const btns = document.querySelectorAll('.filter-buttons .btn-outline-primary');
         btns.forEach(btn => {
@@ -498,18 +517,16 @@
         });
     }
 
-    // معالجة نموذج التواصل
     function handleContactSubmit(form) {
-        // محاكاة إرسال ناجح
         alert("✅ تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.");
         form.reset();
-        return false; // لمنع إعادة تحميل الصفحة
+        return false;
     }
 
     // تهيئة الصفحة
     window.onload = () => {
+        loadData();
         showSection('homeSection');
-        // إضافة استماع للبحث عند الضغط على Enter
         document.getElementById("searchInput").addEventListener("keypress", function(e) {
             if (e.key === "Enter") handleSearch();
         });
