@@ -16,16 +16,9 @@
             --gray-bg: #f8fafc;
         }
 
-        * {
-            font-family: 'Cairo', sans-serif;
-        }
+        * { font-family: 'Cairo', sans-serif; }
+        body { background: var(--gray-bg); color: var(--dark-text); }
 
-        body {
-            background: var(--gray-bg);
-            color: var(--dark-text);
-        }
-
-        /* Login Page */
         .login-wrapper {
             min-height: 100vh;
             display: flex;
@@ -57,107 +50,34 @@
             color: white;
         }
 
-        /* Admin Content */
-        .navbar {
-            background: var(--white);
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-            padding: 0.8rem 1rem;
-        }
-
-        .navbar-brand {
-            font-weight: 800;
-            color: var(--medical-blue);
-            font-size: 1.6rem;
-        }
-
-        .card-custom {
-            border: none;
-            border-radius: 1.2rem;
-            background: var(--white);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-            transition: all 0.2s;
-        }
-
-        .card-custom:hover {
-            box-shadow: 0 12px 25px rgba(0,0,0,0.08);
-        }
-
-        .section-title {
-            font-weight: 800;
-            border-right: 5px solid var(--medical-blue);
-            padding-right: 15px;
-            margin-bottom: 1.5rem;
-        }
-
-        .btn-medical {
-            background: var(--medical-blue);
-            color: white;
-            border: none;
-            transition: 0.2s;
-        }
-
-        .btn-medical:hover {
-            background: #248177;
-            color: white;
-        }
-
-        .btn-outline-medical {
-            border: 1px solid var(--medical-blue);
-            color: var(--medical-blue);
-        }
-
-        .btn-outline-medical:hover {
-            background: var(--medical-blue);
-            color: white;
-        }
-
-        .table-actions i {
-            cursor: pointer;
-            margin: 0 5px;
-            transition: 0.2s;
-        }
-
-        .table-actions i:hover {
-            transform: scale(1.1);
-        }
-
-        footer {
-            margin-top: 3rem;
-            padding: 1.5rem;
-            text-align: center;
-            color: #718096;
-            border-top: 1px solid #edf2f7;
-        }
-
-        /* Modal */
-        .modal-header {
-            border-bottom: none;
-        }
-        .modal-footer {
-            border-top: none;
-        }
-
-        /* Alert */
-        .alert-custom {
-            border-radius: 1rem;
-            font-size: 0.9rem;
-        }
+        .navbar { background: var(--white); box-shadow: 0 2px 15px rgba(0,0,0,0.05); padding: 0.8rem 1rem; }
+        .navbar-brand { font-weight: 800; color: var(--medical-blue); font-size: 1.6rem; }
+        .card-custom { border: none; border-radius: 1.2rem; background: var(--white); box-shadow: 0 5px 15px rgba(0,0,0,0.03); transition: all 0.2s; }
+        .card-custom:hover { box-shadow: 0 12px 25px rgba(0,0,0,0.08); }
+        .section-title { font-weight: 800; border-right: 5px solid var(--medical-blue); padding-right: 15px; margin-bottom: 1.5rem; }
+        .btn-medical { background: var(--medical-blue); color: white; border: none; transition: 0.2s; }
+        .btn-medical:hover { background: #248177; color: white; }
+        .btn-outline-medical { border: 1px solid var(--medical-blue); color: var(--medical-blue); }
+        .btn-outline-medical:hover { background: var(--medical-blue); color: white; }
+        .table-actions i { cursor: pointer; margin: 0 5px; transition: 0.2s; }
+        .table-actions i:hover { transform: scale(1.1); }
+        .status-badge { border-radius: 50px; padding: 4px 12px; font-size: 0.75rem; font-weight: 700; }
+        .available { background: #d1e7dd; color: #0f5132; }
+        .unavailable { background: #f8d7da; color: #842029; }
+        footer { margin-top: 3rem; padding: 1.5rem; text-align: center; color: #718096; border-top: 1px solid #edf2f7; }
     </style>
 </head>
 <body>
 
-<!-- قسم تسجيل الدخول -->
 <div id="loginSection" class="login-wrapper">
     <div class="login-card">
-        <div class="login-icon">
-            <i class="fas fa-user-shield"></i>
-        </div>
+        <div class="login-icon"><i class="fas fa-user-shield"></i></div>
         <h3 class="fw-bold mb-2">مرحباً بعودتك</h3>
         <p class="text-muted mb-4">سجل الدخول للوصول إلى لوحة التحكم</p>
         <form id="loginForm" onsubmit="return handleLogin(event)">
             <div class="mb-3">
                 <label class="form-label fw-bold text-start d-block">ايميل المستخدم</label>
-                <input type="text" id="username" class="form-control form-control-lg rounded-pill" placeholder="gmail..." required autocomplete="off">
+                <input type="text" id="username" class="form-control form-control-lg rounded-pill" placeholder="gmail..." required>
             </div>
             <div class="mb-4">
                 <label class="form-label fw-bold text-start d-block">كلمة المرور</label>
@@ -169,480 +89,338 @@
     </div>
 </div>
 
-<!-- المحتوى الإداري (يظهر بعد تسجيل الدخول) -->
 <div id="adminContent" style="display: none;">
     <nav class="navbar sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="fas fa-user-shield"></i> لوحة المسؤول | صيدلتي
-            </a>
+            <a class="navbar-brand" href="#"><i class="fas fa-user-shield"></i> لوحة المسؤول | صيدلتي</a>
             <div>
-                <a href="index.html" class="btn btn-outline-medical btn-sm rounded-pill me-2">
-                    <i class="fas fa-external-link-alt"></i> عرض الموقع
-                </a>
-                <button class="btn btn-outline-danger btn-sm rounded-pill" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i> تسجيل خروج
-                </button>
+                <button class="btn btn-outline-danger btn-sm rounded-pill" onclick="logout()"><i class="fas fa-sign-out-alt"></i> تسجيل خروج</button>
             </div>
         </div>
     </nav>
 
     <div class="container py-4">
-        <!-- تبويبات الإدارة -->
         <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="pharmacies-tab" data-bs-toggle="tab" data-bs-target="#pharmacies" type="button" role="tab">
-                    <i class="fas fa-hospital"></i> الصيدليات
-                </button>
+            <li class="nav-item">
+                <button class="nav-link active" id="pharmacies-tab" data-bs-toggle="tab" data-bs-target="#pharmacies" type="button">الصيدليات</button>
             </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="drugs-tab" data-bs-toggle="tab" data-bs-target="#drugs" type="button" role="tab">
-                    <i class="fas fa-capsules"></i> الأدوية
-                </button>
+            <li class="nav-item">
+                <button class="nav-link" id="drugs-tab" data-bs-toggle="tab" data-bs-target="#drugs" type="button">الأدوية</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" id="import-tab" data-bs-toggle="tab" data-bs-target="#import-section" type="button">استيراد وبحث</button>
             </li>
         </ul>
 
         <div class="tab-content">
-            <!-- إدارة الصيدليات -->
-            <div class="tab-pane fade show active" id="pharmacies" role="tabpanel">
+            <div class="tab-pane fade show active" id="pharmacies">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h3 class="section-title mb-0">قائمة الصيدليات</h3>
-                    <button class="btn btn-medical rounded-pill" data-bs-toggle="modal" data-bs-target="#addPharmacyModal">
-                        <i class="fas fa-plus"></i> إضافة صيدلية
-                    </button>
+                    <button class="btn btn-medical rounded-pill" data-bs-toggle="modal" data-bs-target="#addPharmacyModal"><i class="fas fa-plus"></i> إضافة صيدلية</button>
                 </div>
                 <div class="card-custom p-3">
                     <div class="table-responsive">
                         <table class="table table-hover align-middle">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>اسم الصيدلية</th>
-                                    <th>الموقع</th>
-                                    <th>رقم الهاتف</th>
-                                    <th>الإجراءات</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>#</th><th>اسم الصيدلية</th><th>الموقع</th><th>الهاتف</th><th>الإجراءات</th></tr></thead>
                             <tbody id="pharmaciesTableBody"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- إدارة الأدوية -->
-            <div class="tab-pane fade" id="drugs" role="tabpanel">
+            <div class="tab-pane fade" id="drugs">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h3 class="section-title mb-0">قائمة الأدوية</h3>
-                    <button class="btn btn-medical rounded-pill" data-bs-toggle="modal" data-bs-target="#addDrugModal">
-                        <i class="fas fa-plus"></i> إضافة دواء
-                    </button>
+                    <button class="btn btn-medical rounded-pill" data-bs-toggle="modal" data-bs-target="#addDrugModal"><i class="fas fa-plus"></i> إضافة دواء</button>
                 </div>
                 <div class="card-custom p-3">
                     <div class="table-responsive">
                         <table class="table table-hover align-middle">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>اسم الدواء</th>
-                                    <th>الصيدلية</th>
-                                    <th>السعر (ج.س)</th>
-                                    <th>الحالة</th>
-                                    <th>الإجراءات</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>#</th><th>اسم الدواء</th><th>الصيدلية</th><th>السعر</th><th>الحالة</th><th>الإجراءات</th></tr></thead>
                             <tbody id="drugsTableBody"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
+
+            <div class="tab-pane fade" id="import-section">
+                <div class="card-custom p-4 mb-4">
+                    <h5 class="fw-bold mb-3">أدوات الاستيراد السريع</h5>
+                    <input type="file" id="fileInput" style="display: none;" />
+                    <button class="btn btn-outline-medical rounded-pill me-2" onclick="importFromFile('pharmacy')"><i class="fas fa-upload"></i> استيراد صيدليات</button>
+                    <button class="btn btn-outline-medical rounded-pill" onclick="importFromFile('drug')"><i class="fas fa-file-import"></i> استيراد أدوية</button>
+                </div>
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold mb-4">معاينة البحث</h2>
+                    <div class="input-group input-group-lg mx-auto" style="max-width: 600px;">
+                        <input type="text" id="searchInput" class="form-control border-0 shadow-sm" placeholder="اسم الدواء...">
+                        <button class="btn btn-medical" onclick="handleSearch()"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+                <div id="resultsGrid" class="row g-4 mb-5"></div>
+                <h3 class="section-title">معاينة الصيدليات</h3>
+                <div id="pharmaciesList" class="row g-4"></div>
+            </div>
         </div>
     </div>
-
-    <footer>
-        <p class="mb-0 fw-bold">صيدلتي &copy; 2026 - لوحة المسؤول</p>
-        <p class="small">يمكنك تعديل البيانات مباشرة، وسيتم تحديث الموقع تلقائياً.</p>
-    </footer>
 </div>
 
-<!-- Modal: إضافة/تعديل صيدلية -->
 <div class="modal fade" id="addPharmacyModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="pharmacyModalTitle">إضافة صيدلية جديدة</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
+            <div class="modal-header"><h5 class="modal-title" id="pharmacyModalTitle">إضافة صيدلية</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
             <div class="modal-body">
                 <form id="pharmacyForm">
-                    <input type="hidden" id="pharmacyId" value="">
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">اسم الصيدلية</label>
-                        <input type="text" id="pharmacyName" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">الموقع</label>
-                        <input type="text" id="pharmacyLocation" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">رقم الهاتف (واتساب)</label>
-                        <input type="tel" id="pharmacyPhone" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">أيقونة (FontAwesome)</label>
-                        <input type="text" id="pharmacyIcon" class="form-control" value="fa-hospital">
-                        <div class="form-text">مثال: fa-hospital, fa-clinic-medical, fa-house-medical</div>
-                    </div>
+                    <input type="hidden" id="pharmacyId">
+                    <div class="mb-3"><label class="form-label fw-bold">الاسم</label><input type="text" id="pharmacyName" class="form-control" required></div>
+                    <div class="mb-3"><label class="form-label fw-bold">الموقع</label><input type="text" id="pharmacyLocation" class="form-control" required></div>
+                    <div class="mb-3"><label class="form-label fw-bold">الهاتف</label><input type="tel" id="pharmacyPhone" class="form-control" required></div>
+                    <div class="mb-3"><label class="form-label fw-bold">الأيقونة</label><input type="text" id="pharmacyIcon" class="form-control" value="fa-hospital"></div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                <button type="button" class="btn btn-medical" onclick="savePharmacy()">حفظ</button>
-            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button><button type="button" class="btn btn-medical" onclick="savePharmacy()">حفظ</button></div>
         </div>
     </div>
 </div>
 
-<!-- Modal: إضافة/تعديل دواء -->
 <div class="modal fade" id="addDrugModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="drugModalTitle">إضافة دواء جديد</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
+            <div class="modal-header"><h5 class="modal-title" id="drugModalTitle">إضافة دواء</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
             <div class="modal-body">
                 <form id="drugForm">
-                    <input type="hidden" id="drugId" value="">
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">اسم الدواء</label>
-                        <input type="text" id="drugName" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">الصيدلية</label>
-                        <select id="drugPharmacy" class="form-select" required></select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">السعر (ج.س)</label>
-                        <input type="number" id="drugPrice" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">الحالة</label>
-                        <select id="drugStatus" class="form-select">
-                            <option value="available">متوفر</option>
-                            <option value="unavailable">غير متوفر</option>
-                        </select>
-                    </div>
+                    <input type="hidden" id="drugId">
+                    <div class="mb-3"><label class="form-label fw-bold">الاسم</label><input type="text" id="drugName" class="form-control" required></div>
+                    <div class="mb-3"><label class="form-label fw-bold">الصيدلية</label><select id="drugPharmacy" class="form-select" required></select></div>
+                    <div class="mb-3"><label class="form-label fw-bold">السعر</label><input type="number" id="drugPrice" class="form-control" required></div>
+                    <div class="mb-3"><label class="form-label fw-bold">الحالة</label><select id="drugStatus" class="form-select"><option value="available">متوفر</option><option value="unavailable">غير متوفر</option></select></div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                <button type="button" class="btn btn-medical" onclick="saveDrug()">حفظ</button>
-            </div>
+            <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button><button type="button" class="btn btn-medical" onclick="saveDrug()">حفظ</button></div>
         </div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // بيانات المصادقة
     const ADMIN_USERNAME = "Mazin Hassan";
     const ADMIN_PASSWORD = "panda@2025";
     
-    // متغيرات البيانات
-    let pharmacies = [];
-    let drugs = [];
+    let pharmacies = JSON.parse(localStorage.getItem('pharmacies')) || [
+        { id: 1, name: "صيدلية النور", location: "الرياض", phone: "0912345678", icon: "fa-hospital" }
+    ];
+    let drugs = JSON.parse(localStorage.getItem('drugs')) || [
+        { id: 1, name: "بانادول", pharmacyId: 1, price: "1200", status: "available" }
+    ];
 
-    // ------------------- نظام تسجيل الدخول -------------------
+    function saveToLocal() {
+        localStorage.setItem('pharmacies', JSON.stringify(pharmacies));
+        localStorage.setItem('drugs', JSON.stringify(drugs));
+    }
+
     function handleLogin(event) {
         event.preventDefault();
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value;
-        
-        if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-            // تخزين حالة تسجيل الدخول في sessionStorage (تختفي عند إغلاق المتصفح)
+        const u = document.getElementById('username').value.trim();
+        const p = document.getElementById('password').value;
+        if (u === ADMIN_USERNAME && p === ADMIN_PASSWORD) {
             sessionStorage.setItem('admin_logged_in', 'true');
             showAdminPanel();
         } else {
-            const errorDiv = document.getElementById('loginError');
-            errorDiv.style.display = 'block';
-            setTimeout(() => { errorDiv.style.display = 'none'; }, 3000);
+            document.getElementById('loginError').style.display = 'block';
         }
-        return false;
     }
 
-    function logout() {
-        sessionStorage.removeItem('admin_logged_in');
-        showLoginPanel();
-    }
+    function logout() { sessionStorage.removeItem('admin_logged_in'); location.reload(); }
 
     function showAdminPanel() {
         document.getElementById('loginSection').style.display = 'none';
         document.getElementById('adminContent').style.display = 'block';
-        // تحميل البيانات بعد الدخول
-        loadData();
-        renderPharmacies();
-        renderDrugs();
+        refreshUI();
+    }
+
+    function refreshUI() {
+        renderPharmaciesTable();
+        renderDrugsTable();
+        renderPharmaciesGrid();
         updatePharmacySelect();
     }
 
-    function showLoginPanel() {
-        document.getElementById('loginSection').style.display = 'flex';
-        document.getElementById('adminContent').style.display = 'none';
-        // إعادة تعيين حقل الدخول
-        document.getElementById('username').value = '';
-        document.getElementById('password').value = '';
-    }
-
-    // التحقق من الجلسة عند تحميل الصفحة
-    function checkSession() {
-        const isLoggedIn = sessionStorage.getItem('admin_logged_in') === 'true';
-        if (isLoggedIn) {
-            showAdminPanel();
-        } else {
-            showLoginPanel();
-        }
-    }
-
-    // ------------------- إدارة البيانات (محلية) -------------------
-    function loadData() {
-        const storedPharmacies = localStorage.getItem('pharmacies');
-        const storedDrugs = localStorage.getItem('drugs');
-        
-        if (storedPharmacies) {
-            pharmacies = JSON.parse(storedPharmacies);
-        } else {
-            pharmacies = [
-                { id: 1, name: "صيدلية النور", location: "الخرطوم - الرياض", phone: "0912345678", icon: "fa-hospital" },
-                { id: 2, name: "صيدلية مكة", location: "أم درمان - الثورة", phone: "0912111222", icon: "fa-clinic-medical" },
-                { id: 3, name: "صيدلية السلام", location: "بحري - شمبات", phone: "0123000999", icon: "fa-house-medical" },
-                { id: 4, name: "صيدلية ابن سينا", location: "الخرطوم - المعمورة", phone: "0965444333", icon: "fa-kit-medical" }
-            ];
-            savePharmacies();
-        }
-
-        if (storedDrugs) {
-            drugs = JSON.parse(storedDrugs);
-        } else {
-            drugs = [
-                { id: 1, name: "بانادول", pharmacyId: 1, price: "1200", status: "available" },
-                { id: 2, name: "أوميبرازول", pharmacyId: 2, price: "3500", status: "available" },
-                { id: 3, name: "أوجمنتين", pharmacyId: 3, price: "8000", status: "unavailable" },
-                { id: 4, name: "باراسيتامول", pharmacyId: 4, price: "900", status: "available" },
-                { id: 5, name: "سبازموكان", pharmacyId: 1, price: "2500", status: "available" },
-                { id: 6, name: "سيتال", pharmacyId: 2, price: "500", status: "unavailable" }
-            ];
-            saveDrugs();
-        }
-    }
-
-    function savePharmacies() {
-        localStorage.setItem('pharmacies', JSON.stringify(pharmacies));
-    }
-
-    function saveDrugs() {
-        localStorage.setItem('drugs', JSON.stringify(drugs));
-    }
-
-    function renderPharmacies() {
+    function renderPharmaciesTable() {
         const tbody = document.getElementById('pharmaciesTableBody');
-        if (!tbody) return;
-        tbody.innerHTML = '';
-        pharmacies.forEach((ph, index) => {
-            const row = tbody.insertRow();
-            row.insertCell(0).innerText = index + 1;
-            row.insertCell(1).innerHTML = `<i class="fas ${ph.icon} me-2 text-primary"></i> ${ph.name}`;
-            row.insertCell(2).innerText = ph.location;
-            row.insertCell(3).innerText = ph.phone;
-            const actionsCell = row.insertCell(4);
-            actionsCell.className = 'table-actions';
-            actionsCell.innerHTML = `
-                <i class="fas fa-edit text-primary" onclick="editPharmacy(${ph.id})" title="تعديل"></i>
-                <i class="fas fa-trash-alt text-danger" onclick="deletePharmacy(${ph.id})" title="حذف"></i>
-            `;
-        });
+        tbody.innerHTML = pharmacies.map((ph, i) => `
+            <tr>
+                <td>${i+1}</td>
+                <td><i class="fas ${ph.icon} text-primary"></i> ${ph.name}</td>
+                <td>${ph.location}</td>
+                <td>${ph.phone}</td>
+                <td class="table-actions">
+                    <i class="fas fa-edit text-primary" onclick="editPharmacy(${ph.id})"></i>
+                    <i class="fas fa-trash-alt text-danger" onclick="deletePharmacy(${ph.id})"></i>
+                </td>
+            </tr>
+        `).join('');
     }
 
-    function renderDrugs() {
+    function renderDrugsTable() {
         const tbody = document.getElementById('drugsTableBody');
-        if (!tbody) return;
-        tbody.innerHTML = '';
-        drugs.forEach((drug, index) => {
-            const pharmacy = pharmacies.find(p => p.id === drug.pharmacyId);
-            const pharmacyName = pharmacy ? pharmacy.name : 'غير معروف';
-            const row = tbody.insertRow();
-            row.insertCell(0).innerText = index + 1;
-            row.insertCell(1).innerText = drug.name;
-            row.insertCell(2).innerText = pharmacyName;
-            row.insertCell(3).innerText = drug.price;
-            row.insertCell(4).innerHTML = `<span class="badge ${drug.status === 'available' ? 'bg-success' : 'bg-danger'}">${drug.status === 'available' ? 'متوفر' : 'غير متوفر'}</span>`;
-            const actionsCell = row.insertCell(5);
-            actionsCell.className = 'table-actions';
-            actionsCell.innerHTML = `
-                <i class="fas fa-edit text-primary" onclick="editDrug(${drug.id})" title="تعديل"></i>
-                <i class="fas fa-trash-alt text-danger" onclick="deleteDrug(${drug.id})" title="حذف"></i>
+        tbody.innerHTML = drugs.map((d, i) => {
+            const ph = pharmacies.find(p => p.id === d.pharmacyId);
+            return `
+                <tr>
+                    <td>${i+1}</td>
+                    <td>${d.name}</td>
+                    <td>${ph ? ph.name : 'غير معروف'}</td>
+                    <td>${d.price}</td>
+                    <td><span class="badge ${d.status==='available'?'bg-success':'bg-danger'}">${d.status==='available'?'متوفر':'غير متوفر'}</span></td>
+                    <td class="table-actions">
+                        <i class="fas fa-edit text-primary" onclick="editDrug(${d.id})"></i>
+                        <i class="fas fa-trash-alt text-danger" onclick="deleteDrug(${d.id})"></i>
+                    </td>
+                </tr>
             `;
-        });
+        }).join('');
+    }
+
+    function renderPharmaciesGrid() {
+        const list = document.getElementById('pharmaciesList');
+        list.innerHTML = pharmacies.map(p => `
+            <div class="col-md-3">
+                <div class="card card-custom p-3 text-center">
+                    <i class="fas ${p.icon} fa-2x text-primary mb-2"></i>
+                    <h6 class="fw-bold">${p.name}</h6>
+                    <a href="tel:${p.phone}" class="btn btn-sm btn-outline-primary rounded-pill w-100">اتصال</a>
+                </div>
+            </div>
+        `).join('');
     }
 
     function updatePharmacySelect() {
         const select = document.getElementById('drugPharmacy');
-        if (!select) return;
-        select.innerHTML = '';
-        pharmacies.forEach(ph => {
-            const option = document.createElement('option');
-            option.value = ph.id;
-            option.textContent = ph.name;
-            select.appendChild(option);
-        });
+        select.innerHTML = pharmacies.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
     }
 
-    // --- إدارة الصيدليات ---
     function savePharmacy() {
         const id = document.getElementById('pharmacyId').value;
-        const name = document.getElementById('pharmacyName').value.trim();
-        const location = document.getElementById('pharmacyLocation').value.trim();
-        const phone = document.getElementById('pharmacyPhone').value.trim();
-        const icon = document.getElementById('pharmacyIcon').value.trim() || 'fa-hospital';
+        const name = document.getElementById('pharmacyName').value;
+        const loc = document.getElementById('pharmacyLocation').value;
+        const phone = document.getElementById('pharmacyPhone').value;
+        const icon = document.getElementById('pharmacyIcon').value;
 
-        if (!name || !location || !phone) {
-            alert('يرجى ملء جميع الحقول');
-            return;
-        }
-
-        if (id) {
-            const index = pharmacies.findIndex(p => p.id == id);
-            if (index !== -1) {
-                pharmacies[index] = { ...pharmacies[index], name, location, phone, icon };
-                savePharmacies();
-            }
+        if(id) {
+            const i = pharmacies.findIndex(p => p.id == id);
+            pharmacies[i] = {id: parseInt(id), name, location: loc, phone, icon};
         } else {
             const newId = pharmacies.length > 0 ? Math.max(...pharmacies.map(p => p.id)) + 1 : 1;
-            pharmacies.push({ id: newId, name, location, phone, icon });
-            savePharmacies();
+            pharmacies.push({id: newId, name, location: loc, phone, icon});
         }
-
-        resetPharmacyForm();
-        const modal = bootstrap.Modal.getInstance(document.getElementById('addPharmacyModal'));
-        modal.hide();
-        renderPharmacies();
-        updatePharmacySelect();
+        saveToLocal(); refreshUI(); bootstrap.Modal.getInstance(document.getElementById('addPharmacyModal')).hide();
     }
 
     function editPharmacy(id) {
-        const pharmacy = pharmacies.find(p => p.id === id);
-        if (!pharmacy) return;
-
-        document.getElementById('pharmacyId').value = pharmacy.id;
-        document.getElementById('pharmacyName').value = pharmacy.name;
-        document.getElementById('pharmacyLocation').value = pharmacy.location;
-        document.getElementById('pharmacyPhone').value = pharmacy.phone;
-        document.getElementById('pharmacyIcon').value = pharmacy.icon;
-
-        document.getElementById('pharmacyModalTitle').innerText = 'تعديل الصيدلية';
-        const modal = new bootstrap.Modal(document.getElementById('addPharmacyModal'));
-        modal.show();
+        const ph = pharmacies.find(p => p.id === id);
+        document.getElementById('pharmacyId').value = ph.id;
+        document.getElementById('pharmacyName').value = ph.name;
+        document.getElementById('pharmacyLocation').value = ph.location;
+        document.getElementById('pharmacyPhone').value = ph.phone;
+        document.getElementById('pharmacyIcon').value = ph.icon;
+        new bootstrap.Modal(document.getElementById('addPharmacyModal')).show();
     }
 
     function deletePharmacy(id) {
-        if (confirm('هل أنت متأكد من حذف هذه الصيدلية؟ سيتم حذف جميع الأدوية المرتبطة بها أيضاً.')) {
-            drugs = drugs.filter(d => d.pharmacyId !== id);
-            saveDrugs();
+        if(confirm('سيتم حذف الصيدلية وأدويتها!')) {
             pharmacies = pharmacies.filter(p => p.id !== id);
-            savePharmacies();
-            renderPharmacies();
-            renderDrugs();
-            updatePharmacySelect();
+            drugs = drugs.filter(d => d.pharmacyId !== id);
+            saveToLocal(); refreshUI();
         }
     }
 
-    function resetPharmacyForm() {
-        document.getElementById('pharmacyId').value = '';
-        document.getElementById('pharmacyName').value = '';
-        document.getElementById('pharmacyLocation').value = '';
-        document.getElementById('pharmacyPhone').value = '';
-        document.getElementById('pharmacyIcon').value = 'fa-hospital';
-        document.getElementById('pharmacyModalTitle').innerText = 'إضافة صيدلية جديدة';
-    }
-
-    // --- إدارة الأدوية ---
     function saveDrug() {
         const id = document.getElementById('drugId').value;
-        const name = document.getElementById('drugName').value.trim();
-        const pharmacyId = parseInt(document.getElementById('drugPharmacy').value);
-        const price = document.getElementById('drugPrice').value.trim();
+        const name = document.getElementById('drugName').value;
+        const phId = parseInt(document.getElementById('drugPharmacy').value);
+        const price = document.getElementById('drugPrice').value;
         const status = document.getElementById('drugStatus').value;
 
-        if (!name || !pharmacyId || !price) {
-            alert('يرجى ملء جميع الحقول');
-            return;
-        }
-
-        if (id) {
-            const index = drugs.findIndex(d => d.id == id);
-            if (index !== -1) {
-                drugs[index] = { ...drugs[index], name, pharmacyId, price, status };
-                saveDrugs();
-            }
+        if(id) {
+            const i = drugs.findIndex(d => d.id == id);
+            drugs[i] = {id: parseInt(id), name, pharmacyId: phId, price, status};
         } else {
             const newId = drugs.length > 0 ? Math.max(...drugs.map(d => d.id)) + 1 : 1;
-            drugs.push({ id: newId, name, pharmacyId, price, status });
-            saveDrugs();
+            drugs.push({id: newId, name, pharmacyId: phId, price, status});
         }
-
-        resetDrugForm();
-        const modal = bootstrap.Modal.getInstance(document.getElementById('addDrugModal'));
-        modal.hide();
-        renderDrugs();
+        saveToLocal(); refreshUI(); bootstrap.Modal.getInstance(document.getElementById('addDrugModal')).hide();
     }
 
     function editDrug(id) {
-        const drug = drugs.find(d => d.id === id);
-        if (!drug) return;
-
-        document.getElementById('drugId').value = drug.id;
-        document.getElementById('drugName').value = drug.name;
-        document.getElementById('drugPharmacy').value = drug.pharmacyId;
-        document.getElementById('drugPrice').value = drug.price;
-        document.getElementById('drugStatus').value = drug.status;
-
-        document.getElementById('drugModalTitle').innerText = 'تعديل الدواء';
-        const modal = new bootstrap.Modal(document.getElementById('addDrugModal'));
-        modal.show();
+        const d = drugs.find(x => x.id === id);
+        document.getElementById('drugId').value = d.id;
+        document.getElementById('drugName').value = d.name;
+        document.getElementById('drugPharmacy').value = d.pharmacyId;
+        document.getElementById('drugPrice').value = d.price;
+        document.getElementById('drugStatus').value = d.status;
+        new bootstrap.Modal(document.getElementById('addDrugModal')).show();
     }
 
     function deleteDrug(id) {
-        if (confirm('هل أنت متأكد من حذف هذا الدواء؟')) {
-            drugs = drugs.filter(d => d.id !== id);
-            saveDrugs();
-            renderDrugs();
-        }
+        if(confirm('حذف الدواء؟')) { drugs = drugs.filter(x => x.id !== id); saveToLocal(); refreshUI(); }
     }
 
-    function resetDrugForm() {
-        document.getElementById('drugId').value = '';
-        document.getElementById('drugName').value = '';
-        document.getElementById('drugPharmacy').value = pharmacies.length > 0 ? pharmacies[0].id : '';
-        document.getElementById('drugPrice').value = '';
-        document.getElementById('drugStatus').value = 'available';
-        document.getElementById('drugModalTitle').innerText = 'إضافة دواء جديد';
+    function handleSearch() {
+        const q = document.getElementById('searchInput').value.trim();
+        const grid = document.getElementById('resultsGrid');
+        const results = drugs.filter(d => d.name.includes(q));
+        grid.innerHTML = results.map(r => {
+            const ph = pharmacies.find(p => p.id === r.pharmacyId);
+            return `
+                <div class="col-md-6">
+                    <div class="card card-custom p-3">
+                        <h5 class="fw-bold text-primary">${r.name}</h5>
+                        <p class="small mb-1 text-muted">${ph ? ph.name : ''}</p>
+                        <p class="fw-bold text-success">${r.price} ج.س</p>
+                    </div>
+                </div>
+            `;
+        }).join('');
     }
 
-    // تحديث القوائم عند التبويب
-    document.getElementById('pharmacies-tab')?.addEventListener('shown.bs.tab', () => renderPharmacies());
-    document.getElementById('drugs-tab')?.addEventListener('shown.bs.tab', () => {
-        renderDrugs();
-        updatePharmacySelect();
-    });
+    function importFromFile(type) {
+        const fileInput = document.getElementById('fileInput');
+        fileInput.accept = '.json';
+        fileInput.onchange = (e) => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const data = JSON.parse(event.target.result);
+                type === 'pharmacy' ? processPharmacies(data) : processDrugs(data);
+                fileInput.value = '';
+            };
+            reader.readAsText(file);
+        };
+        fileInput.click();
+    }
 
-    // عند فتح مودال إضافة دواء، تحديث المنسدلة
-    document.getElementById('addDrugModal')?.addEventListener('show.bs.modal', () => {
-        updatePharmacySelect();
-        resetDrugForm();
-    });
-    document.getElementById('addPharmacyModal')?.addEventListener('show.bs.modal', resetPharmacyForm);
+    function processPharmacies(list) {
+        list.forEach(item => {
+            const idx = pharmacies.findIndex(p => p.name === item.name);
+            if(idx > -1) pharmacies[idx] = {...pharmacies[idx], ...item};
+            else pharmacies.push({id: Date.now() + Math.random(), icon: 'fa-hospital', ...item});
+        });
+        saveToLocal(); refreshUI(); alert('تم الاستيراد');
+    }
 
-    // بدء التشغيل: التحقق من الجلسة
-    checkSession();
+    function processDrugs(list) {
+        list.forEach(item => {
+            const ph = pharmacies.find(p => p.name === item.pharmacyName);
+            if(ph) {
+                const idx = drugs.findIndex(d => d.name === item.name && d.pharmacyId === ph.id);
+                if(idx > -1) drugs[idx].price = item.price;
+                else drugs.push({id: Date.now() + Math.random(), name: item.name, pharmacyId: ph.id, price: item.price, status: 'available'});
+            }
+        });
+        saveToLocal(); refreshUI(); alert('تم الاستيراد');
+    }
+
+    window.onload = () => { if(sessionStorage.getItem('admin_logged_in') === 'true') showAdminPanel(); };
 </script>
 </body>
-  </html>
+</html>
